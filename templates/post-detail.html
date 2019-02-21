@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Пост</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body style="margin: 25px">
+
+<div class="h3 text-center font-weight-bold" style="color: blue; ">Пост {{ post.id }}</div>
+
+<div class="container-fluid" style="background-color: #ffdfe3; border: 1px double #ffb3a2; ">
+    <div class="row" style="border-bottom: solid 1px #ffb3a2; padding: 5px">
+        <div class="col">
+            {{ post.title }}
+        </div>
+        <div class="col-2 text-right">
+            <span class="small">{{ post.created }}</span>
+        </div>
+    </div>
+
+    <div class="row" style="border-bottom: solid 1px #ffb3a2; padding: 5px">
+        <div class="col small">
+            {{ post.text }}
+        </div>
+    </div>
+
+    <div class="row" style="border-bottom: solid 1px #ffb3a2; padding: 5px">
+        <div class="col">
+            {% for tag in post.tags.all %}
+                <span class="badge badge-pill badge-primary">{{ tag.name }}</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="row" style="padding: 5px">
+        <div class="col">
+            {% for comment in comments %}
+                <p class="small">{{ comment.text }}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+</html>
