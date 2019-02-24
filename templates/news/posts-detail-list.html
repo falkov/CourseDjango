@@ -1,0 +1,12 @@
+{# Вывод списка постов в полном виде: Заголовок, дата и время поста, текст поста, теги, комментарии #}
+
+{% extends 'base.html' %}
+{% load my_tags_filters %}
+
+{% block content %}
+    <div class="h3 text-center font-weight-bold" style="color: blue">Посты</div>
+
+    {% for post in posts %}
+        {% my_tag__post_detail this_post=post %}
+    {% endfor %}
+{% endblock content %}

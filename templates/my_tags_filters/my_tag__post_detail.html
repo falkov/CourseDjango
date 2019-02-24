@@ -1,17 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Список постов</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+{#Вывод поста в полном виде: Заголовок, дата и время поста, текст поста, теги, комментарии#}
 
-</head>
-<body style="margin: 25px">
+{% with post=from_my_tag__posts_detail %}
 
-<div class="h3 text-center font-weight-bold" style="color: blue; ">Посты</div>
-
-{% for post in posts_all %}
     <div class="container-fluid" style="background-color: #ffdfe3; border: 1px double #ffb3a2; ">
         <div class="row" style="border-bottom: solid 1px #ffb3a2; padding: 5px">
             <div class="col">
@@ -38,16 +28,12 @@
 
         <div class="row" style="padding: 5px">
             <div class="col">
-                {% for comment in comments_all %}
-                    {% if comment.post.id == post.id %}
-                        <p class="small">{{ comment.text }}</p>
-                    {% endif %}
+                {% for comment in post.get_comments %}
+                    <p class="small">{{ comment.text }}</p>
                 {% endfor %}
             </div>
         </div>
-
     </div>
-    <p></p>
-{% endfor %}
-</body>
-</html>
+    <br>
+
+{% endwith %}

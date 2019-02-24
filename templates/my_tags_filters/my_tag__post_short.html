@@ -1,0 +1,18 @@
+{#Вывод поста в кратком виде: Заголовок, дата и время поста#}
+
+{% with post=from_my_tag__posts_short %}
+
+    <div class="container-fluid" style="background-color: #ffdfe3; border: 1px double #ffb3a2; ">
+        <div class="row" style="border-bottom: solid 1px #ffb3a2; padding: 5px">
+            <div class="col">
+                <a href={% url 'post_detail' slug=post.slug %}>{{ post.title }}</a>
+            </div>
+
+            <div class="col-2 text-right">
+                <span class="small">{{ post.created }}</span>
+            </div>
+        </div>
+    </div>
+    <br>
+
+{% endwith %}

@@ -4,7 +4,7 @@ from django.db import models
 class Category(models.Model):
     """Модель категории"""
     name = models.CharField(verbose_name="Имя", max_length=50)
-    slug = models.SlugField(verbose_name="url", max_length=100)
+    slug = models.SlugField(verbose_name="slug", max_length=100)
 
     def __str__(self):
         return self.name
@@ -17,7 +17,7 @@ class Category(models.Model):
 class Tag(models.Model):
     """Модель тега"""
     name = models.CharField(verbose_name="Имя", max_length=50)
-    slug = models.SlugField(verbose_name="url", max_length=100)
+    slug = models.SlugField(verbose_name="slug", max_length=100)
 
     def __str__(self):
         return self.name
@@ -34,9 +34,13 @@ class Post(models.Model):
     created = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(Tag, verbose_name="Теги")
+    slug = models.SlugField(verbose_name="slug", max_length=100, default="")
 
     def __str__(self):
         return f'title: {self.title}, text:{self.text}'
+
+    def get_comments(self):
+        return Comment.objects.filter(post=self.id)
 
     class Meta:
         verbose_name = "Пост"
@@ -47,7 +51,7 @@ class Post(models.Model):
 class Comment(models.Model):
     """Модель комментария"""
     text = models.TextField(verbose_name="Текст")
-    post = models.ForeignKey(Post, verbose_name="Пост", on_delete=models.SET_NULL, null=True)
+    post = models.ForeignKey(Post, verbose_name="Пост", on_delete=models.CASCADE, null=True)
     created = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
 
     def __str__(self):
