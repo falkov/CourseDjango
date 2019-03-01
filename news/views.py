@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect, HttpResponse
 from django.views.generic.base import View
 
 from .models import Post, Category
+from .forms import CommentForm
 
 
 class PostList(View):
@@ -17,4 +18,21 @@ class PostList(View):
 class PostDetail(View):
     """Один конкретный пост"""
     def get(self, request, slug):
-        return render(request, 'news/post-detail.html', {'post': get_object_or_404(Post, slug=slug)})
+        form = CommentForm()
+        return render(request, 'news/post-detail.html', {'post': get_object_or_404(Post, slug=slug), 'form': form})
+
+    def post(self, request, slug):
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            # my_text = form.cleaned_data['text']
+            form = form.save(commit=False)
+            form.post = Post.objects.get(slug=slug)
+            form.save()
+
+            # возврат на тот-же пост с только что добавленным комментом
+            form = CommentForm()
+            return render(request, 'news/post-detail.html', {'post': get_object_or_404(Post, slug=slug), 'form': form})
+
+        else:
+            return HttpResponse(status=400)

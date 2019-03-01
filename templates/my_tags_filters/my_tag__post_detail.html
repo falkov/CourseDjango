@@ -1,4 +1,4 @@
-{#Вывод поста в полном виде: Заголовок, дата и время поста, текст поста, теги, комментарии#}
+{# Вывод поста в полном виде: Заголовок, дата и время поста, текст поста, теги, комментарии #}
 
 {% with post=from_my_tag__posts_detail %}
 
@@ -29,6 +29,7 @@
         <div class="row" style="padding: 5px">
             <div class="col">
                 {% for comment in post.get_comments %}
+                    <span class="small text-primary">{{ comment.created }}</span>
                     <p class="small">{{ comment.text }}</p>
                 {% endfor %}
             </div>

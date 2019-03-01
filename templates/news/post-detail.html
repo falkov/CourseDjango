@@ -1,4 +1,4 @@
-{# Вывод поста в полном виде: Заголовок, дата и время поста, текст поста, теги, комментарии #}
+{# Вывод поста в полном виде: Заголовок, дата и время поста, текст поста, теги, комменты, форма добавления коммента #}
 
 {% extends 'base.html' %}
 {% load my_tags_filters %}
@@ -7,4 +7,10 @@
     <div class="h3 text-center font-weight-bold" style="color: blue">Пост {{ post.id }}</div>
 
     {% my_tag__post_detail this_post=post %}
+
+    <form action="{% url 'post_detail' slug=post.slug %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить комментарий</button>
+    </form>
 {% endblock content %}
