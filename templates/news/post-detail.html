@@ -2,6 +2,7 @@
 
 {% extends 'base.html' %}
 {% load my_tags_filters %}
+{% load crispy_forms_filters %}
 
 {% block content %}
     <div class="h3 text-center font-weight-bold" style="color: blue">Пост {{ post.id }}</div>
@@ -10,7 +11,7 @@
 
     <form action="{% url 'post_detail' slug=post.slug %}" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Отправить комментарий</button>
+        {{ form | crispy }}
+        <button type="submit" class="btn btn-success btn-sm">Отправить комментарий</button>
     </form>
 {% endblock content %}

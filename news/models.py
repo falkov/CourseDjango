@@ -39,6 +39,12 @@ class Post(models.Model):
     def __str__(self):
         return f'title: {self.title}, text:{self.text}'
 
+    def text_short(self):
+        return self.text[:25]
+
+    def title_short(self):
+        return self.title[:25]
+
     def get_comments(self):
         return Comment.objects.filter(post=self.id)
 
@@ -53,9 +59,13 @@ class Comment(models.Model):
     text = models.TextField(verbose_name="Текст")
     post = models.ForeignKey(Post, verbose_name="Пост", on_delete=models.CASCADE, null=True)
     created = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
+    moderation = models.BooleanField("Разрешено к публикации", default=False)
 
     def __str__(self):
-        return self.text[:50]  # комментарий м.б. очень большим
+        return self.post.title
+
+    def text_short(self):
+        return self.text[:25]
 
     class Meta:
         verbose_name = "Комментарий"
