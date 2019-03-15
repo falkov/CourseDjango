@@ -34,15 +34,15 @@ class CommentInline(admin.TabularInline):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'title', 'subtitle', 'user', 'slug', 'text_short', 'created_short', 'edited_short', 'published_short',
+        'id', 'title', 'subtitle', 'user', 'category','slug', 'text_short', 'created_date_short', 'edited_date_short', 'published_date_short',
         'do_publish', 'show_for_all',
     )
     list_display_links = ('title',)
-    list_filter = ('created', 'category', 'tags',)
+    list_filter = ('created_date', 'category', 'tags',)
     list_editable = ('do_publish', 'show_for_all',)
     search_fields = ('title',)
 
-    readonly_fields = ('created',)
+    readonly_fields = ('created_date',)
     prepopulated_fields = {'slug': ('title',)}
 
     inlines = [CommentInline]

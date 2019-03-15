@@ -4,21 +4,21 @@
 {% load my_tags_filters %}
 
 {% block content %}
-    <div class="h3 text-center font-weight-bold" style="color: blue">Посты</div>
+    <div class="h3 text-center font-weight-bold" style="color: blue">Посты <span class="small"> (Категория: {{ what_category }})</span> </div>
 
     {% for post in posts %}
         {% my_tag__post_short this_post=post this_template=post.category.template %}
     {% endfor %}
 
-
 {#  взял откуда то пагинацию, нужно разобраться  #}
     {% if is_paginated %}
         <ul class="pagination">
             {% if page_obj.has_previous %}
-                <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
             {% else %}
                 <li class="disabled"><span>&laquo;</span></li>
             {% endif %}
+
             {% for i in paginator.page_range %}
                 {% if page_obj.number == i %}
                     <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
@@ -26,8 +26,9 @@
                     <li><a href="?page={{ i }}">{{ i }}</a></li>
                 {% endif %}
             {% endfor %}
+
             {% if page_obj.has_next %}
-                <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
             {% else %}
                 <li class="disabled"><span>&raquo;</span></li>
             {% endif %}

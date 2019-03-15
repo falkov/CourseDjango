@@ -1,15 +1,19 @@
 {# Вывод поста в кратком виде: Заголовок, дата и время поста #}
-
+{% load my_tags_filters %}
 {% with post=from_my_tag__posts_short %}
 
     <div class="container-fluid" style="background-color: #bbc3ff; border: 1px double #5d63ff; ">
         <div class="row" style="border-bottom: solid 1px #5d63ff; padding: 5px">
             <div class="col">
-                <a href={% url 'post_detail' slug=post.slug %}>{{ post.title }}</a>
+                <a href={{ post.get_absolute_url }}>{{ post.title }}</a>
+            </div>
+
+            <div class="col text-center">
+                <span class="small">Категория: {{ post.category.name }}</span>
             </div>
 
             <div class="col-2 text-right">
-                <span class="small">{{ post.created }}</span>
+                <span class="small">{{ post.created_date }}</span>
             </div>
         </div>
     </div>

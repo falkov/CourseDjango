@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -53,9 +54,9 @@ class Post(models.Model):
     title = models.CharField(verbose_name="Заголовок", max_length=100)
     subtitle = models.CharField(verbose_name='Подзаголовок', max_length=100, blank=False, default='')
     text = models.TextField(verbose_name="Текст")
-    created = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
-    edited = models.DateTimeField(verbose_name="Дата редактирования", blank=False, default=timezone.now)
-    published = models.DateTimeField(verbose_name="Дата публикации", blank=False, default=timezone.now)
+    created_date = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
+    edited_date = models.DateTimeField(verbose_name="Дата редактирования", blank=False, default=timezone.now)
+    published_date = models.DateTimeField(verbose_name="Дата публикации", blank=False, default=timezone.now)
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(Tag, verbose_name="Теги")
     slug = models.SlugField(verbose_name="slug", max_length=100, blank=False, default="")
@@ -75,22 +76,28 @@ class Post(models.Model):
     def title_short(self):
         return self.title[:25]
 
-    def created_short(self):
-        return self.created.strftime("%d.%m.%Y")
+    def created_date_short(self):
+        return self.created_date.strftime("%d.%m.%Y")
 
-    def edited_short(self):
-        return self.edited.strftime("%d.%m.%Y")
+    def edited_date_short(self):
+        return self.edited_date.strftime("%d.%m.%Y")
 
-    def published_short(self):
-        return self.published.strftime("%d.%m.%Y")
+    def published_date_short(self):
+        return self.published_date.strftime("%d.%m.%Y")
 
     def get_comments(self):
         return Comment.objects.filter(post=self.id)
 
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'slug': self.slug})
+
+    def proba(self):
+        return 'falkov-falkov-falkov'
+
     class Meta:
         verbose_name = "Пост"
         verbose_name_plural = "Посты"
-        ordering = ["-created"]
+        ordering = ["-created_date"]
 
 
 class Comment(models.Model):

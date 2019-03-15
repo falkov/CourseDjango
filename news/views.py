@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect, HttpResponse
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
-import datetime
+from datetime import datetime
 
 from .models import Post, Category
 from .forms import CommentForm
@@ -26,28 +26,53 @@ class PostList(ListView):
     def get_queryset(self):
         category_slug = self.kwargs.get('slug')
 
-        if category_slug is None:
-            self.paginate_by = 20
-            qs = self.model.objects.all()
+        if category_slug is not None:
+            qs = self.model.objects.filter(category__slug=category_slug)
+
+            if qs.exists():
+                self.paginate_by = qs.first().category.amount_for_pagination
+
+                qs = qs.filter(
+                    do_publish=True,
+                    published_date__date__lte=datetime.now(),
+                )
+
+                if not self.request.user.is_authenticated:
+                    qs = qs.filter(show_for_all=True)
         else:
-            self.paginate_by = get_object_or_404(Category, slug=self.kwargs.get('slug')).amount_for_pagination
-
-            category_id = get_object_or_404(Category, slug=self.kwargs.get('slug')).id
-            qs = self.model.objects.filter(category_id=category_id)
-
-        qs = qs.filter(do_publish=True)                                 # отмечены к публикации
-        qs = qs.filter(published__date__lte=datetime.datetime.today())  # дата публикации не превышает текущую дату
-        qs = qs.filter(show_for_all=True)                               # показывать для всех
+            qs = self.model.objects.all()
+            self.paginate_by = 20
 
         return qs
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(PostList, self).get_context_data(**kwargs)
+        category_slug = self.kwargs.get('slug')
 
-class PostDetail(View):
-    """Один конкретный пост"""
+        if category_slug is None:
+            context['what_category'] = 'Все категории'
+        else:
+            context['what_category'] = Category.objects.filter(slug=category_slug).first().name
 
-    def get(self, request, slug):
-        form = CommentForm()
-        return render(request, 'news/post-detail.html', {'post': get_object_or_404(Post, slug=slug), 'form': form})
+        return context
+
+
+class PostDetail(DetailView):
+    model = Post
+    template_name = 'news/post-detail.html'
+
+    # def get_queryset(self):
+    #     post = Post.objects.get(
+    #         category__slug=self.kwargs.get('slug'),
+    #         do_publish=True,
+    #         published_date__lte=datetime.now(),
+    #     )
+    #     return post
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = CommentForm
+        return context
 
     def post(self, request, slug):
         form = CommentForm(request.POST)
