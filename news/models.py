@@ -5,17 +5,31 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
+from mptt.models import MPTTModel, TreeForeignKey
 
-class Category(models.Model):
+
+class Category(MPTTModel):
     """Модель категории"""
     name = models.CharField(verbose_name="Имя", max_length=50)
     slug = models.SlugField(verbose_name="slug", max_length=100)
     amount_for_pagination = models.PositiveIntegerField(verbose_name='Кол. для пагинации', default=20)
-    template = models.CharField(verbose_name='Используемый шаблон', max_length=100, blank=False,
-                                default='category_posts_template_default.html')
+
+    short_post_template = models.CharField(verbose_name='Шаблон для постов short', max_length=100, blank=False,
+                                           default='news/short_post__template_default.html')
+
+    detail_post_template = models.CharField(verbose_name='Шаблон для постов detail', max_length=100, blank=False,
+                                            default='news/detail_post__template_default.html')
+
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+
+    # class MPTTMeta:
+    #     order_insertion_by = ['name']
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('category_posts_list', kwargs={'slug': self.slug})
 
     def pagination_amount(self):
         return self.amount_for_pagination
@@ -91,21 +105,20 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'slug': self.slug})
 
-    def proba(self):
-        return 'falkov-falkov-falkov'
-
     class Meta:
         verbose_name = "Пост"
         verbose_name_plural = "Посты"
         ordering = ["-created_date"]
 
 
-class Comment(models.Model):
+class Comment(MPTTModel):
     """Модель комментария"""
     text = models.TextField(verbose_name="Текст")
     post = models.ForeignKey(Post, verbose_name="Пост", on_delete=models.CASCADE, null=True)
     created = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
     moderation = models.BooleanField("Разрешено к публикации", default=False)
+
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
     def __str__(self):
         return self.post.title

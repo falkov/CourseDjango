@@ -1,7 +1,0 @@
-{# Вывод вертикального списка категорий, последняя строка - "Все категории" #}
-
-{% for category in from_my_tag__categories_list %}
-    <a href={% url 'category_posts_list' slug=category.slug %}>{{ category.name }}</a> <br>
-{% endfor %}
-
-<a href={% url 'posts_list' %}>Все категории</a> <br>

@@ -1,0 +1,39 @@
+{# Вывод поста в полном виде: Заголовок, дата и время поста, текст поста, теги, комменты, форма добавления коммента #}
+{% load crispy_forms_filters %}
+
+{% block content %}
+    <div class="container-fluid" style="background-color: #bbc3ff; border: 1px double #5d63ff; ">
+        <div class="row" style="border-bottom: solid 1px #5d63ff; padding: 5px">
+            <div class="col">
+                {{ this_post.title }}
+            </div>
+            <div class="col-2 text-right">
+                <span class="small">{{ this_post.created_date }}</span>
+            </div>
+        </div>
+
+        <div class="row" style="border-bottom: solid 1px #5d63ff; padding: 5px">
+            <div class="col small">
+                {{ this_post.text }}
+            </div>
+        </div>
+
+        <div class="row" style="border-bottom: solid 1px #5d63ff; padding: 5px">
+            <div class="col">
+                {% for tag in this_post.tags.all %}
+                    <span class="badge badge-pill badge-primary">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="row" style="padding: 5px">
+            <div class="col">
+                {% for comment in this_post.get_comments %}
+                    <span class="small text-primary">{{ comment.created }}</span>
+                    <p class="small">{{ comment.text }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <br>
+{% endblock content %}

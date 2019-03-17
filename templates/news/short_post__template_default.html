@@ -1,0 +1,18 @@
+{# Вывод поста в кратком виде: Заголовок, дата и время поста #}
+
+<div class="container-fluid" style="background-color: #ffdfe3; border: 1px double #ffb3a2; ">
+    <div class="row" style="border-bottom: solid 1px #ffb3a2; padding: 5px">
+        <div class="col">
+            <a href={{ this_post.get_absolute_url }}>{{ this_post.title }}</a>
+        </div>
+
+        <div class="col text-center">
+            <span class="small">Категория: {{ this_post.category.name }}</span>
+        </div>
+
+        <div class="col-2 text-right">
+            <span class="small">{{ this_post.created_date }}</span>
+        </div>
+    </div>
+</div>
+<br>

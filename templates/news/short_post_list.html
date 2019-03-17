@@ -1,13 +1,31 @@
 {# Вывод списка постов в кратком виде: заголовок (ссылка на пост в подробном виде), дата, время #}
 
 {% extends 'base.html' %}
-{% load my_tags_filters %}
+
+{% load mptt_tags %}
+{% load post_short_tag %}
 
 {% block content %}
+
+    {% if contextprocessor_categories_all %}
+        <ul class="root">
+            {% recursetree contextprocessor_categories_all %}
+                <li>
+                    {{ node.name }}
+                    {% if not node.is_leaf_node %}
+                        <ul class="children">
+                            {{ children }}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endrecursetree %}
+        </ul>
+    {% endif %}
+
     <div class="h3 text-center font-weight-bold" style="color: blue">Посты <span class="small"> (Категория: {{ what_category }})</span> </div>
 
     {% for post in posts %}
-        {% my_tag__post_short this_post=post this_template=post.category.template %}
+        {% post_short_tag this_post=post this_template=post.category.short_post_template %}
     {% endfor %}
 
 {#  взял откуда то пагинацию, нужно разобраться  #}

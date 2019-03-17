@@ -11,17 +11,17 @@ from .forms import CommentForm
 #     """Список постов"""
 #     def get(self, request, slug=None):
 #         if slug is None:
-#             return render(request, 'news/posts-list.html', {'posts': Post.objects.all()})
+#             return render(request, 'news/short_post_list.html', {'posts': Post.objects.all()})
 #         else:
 #             category_id = get_object_or_404(Category, slug=slug).id
-#             return render(request, 'news/posts-list.html', {'posts': Post.objects.filter(category_id=category_id)})
+#             return render(request, 'news/short_post_list.html', {'posts': Post.objects.filter(category_id=category_id)})
 
 
 class PostList(ListView):
     """Список постов"""
     model = Post
     context_object_name = 'posts'
-    template_name = 'news/posts-list.html'
+    template_name = 'news/short_post_list.html'
 
     def get_queryset(self):
         category_slug = self.kwargs.get('slug')
@@ -59,7 +59,7 @@ class PostList(ListView):
 
 class PostDetail(DetailView):
     model = Post
-    template_name = 'news/post-detail.html'
+    template_name = 'news/post_detail.html'
 
     # def get_queryset(self):
     #     post = Post.objects.get(
@@ -85,7 +85,7 @@ class PostDetail(DetailView):
 
             # возврат на тот-же пост с только что добавленным комментом
             form = CommentForm()
-            return render(request, 'news/post-detail.html', {'post': get_object_or_404(Post, slug=slug), 'form': form})
+            return render(request, 'news/post_detail.html', {'post': get_object_or_404(Post, slug=slug), 'form': form})
 
         else:
             return HttpResponse(status=400)

@@ -1,4 +1,6 @@
 from django.contrib import admin
+from mptt.admin import MPTTModelAdmin
+from mptt.forms import TreeNodeChoiceField
 
 from .models import Category, Tag, Post, Comment
 
@@ -6,10 +8,13 @@ admin.site.site_header = 'Привет, falkov!'
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'slug', 'amount_for_pagination', 'template',)
+class CategoryAdmin(MPTTModelAdmin):
+    list_display = ('id', 'name', 'slug', 'amount_for_pagination', 'short_post_template', 'detail_post_template',)
     list_display_links = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+
+    mptt_indent_field = 'name'
+    mptt_level_indent = 30
 
     # непонятно, как вернуть из модели Category значение поля 'amount_for_pagination'
     # или как вызвать функцию модели pagination_amount(), которая возвращает это
