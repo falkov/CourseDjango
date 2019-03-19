@@ -2,25 +2,24 @@
 
 {% extends 'base.html' %}
 
-{% load mptt_tags %}
+{#{% load mptt_tags %}#}
 {% load post_short_tag %}
 
 {% block content %}
-
-    {% if contextprocessor_categories_all %}
-        <ul class="root">
-            {% recursetree contextprocessor_categories_all %}
-                <li>
-                    {{ node.name }}
-                    {% if not node.is_leaf_node %}
-                        <ul class="children">
-                            {{ children }}
-                        </ul>
-                    {% endif %}
-                </li>
-            {% endrecursetree %}
-        </ul>
-    {% endif %}
+{#    {% if contextprocessor_categories_all %}#}
+{#        <ul class="root">#}
+{#            {% recursetree contextprocessor_categories_all %}#}
+{#                <li>#}
+{#                    {{ node.name }}#}
+{#                    {% if not node.is_leaf_node %}#}
+{#                        <ul class="children">#}
+{#                            {{ children }}#}
+{#                        </ul>#}
+{#                    {% endif %}#}
+{#                </li>#}
+{#            {% endrecursetree %}#}
+{#        </ul>#}
+{#    {% endif %}#}
 
     <div class="h3 text-center font-weight-bold" style="color: blue">Посты <span class="small"> (Категория: {{ what_category }})</span> </div>
 

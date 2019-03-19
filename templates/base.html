@@ -1,5 +1,6 @@
 {% load static %}
 {% load category_list_tag %}
+{% load account %}
 
 <!doctype html>
 <html lang="en">
@@ -12,6 +13,15 @@
 </head>
 
 <body style="margin: 25px">
+    <div class="col text-right">
+        {% if user.is_authenticated %}
+            <span>{{ request.user.username }} ({{ user.email }})</span> / <a href="{% url 'account_logout' %}">Выйти</a>
+    {#        <span>{% user_display user %}</span>#}
+        {% else %}
+            <a href="{% url 'account_login' %}">Вход на сайт</a>
+        {% endif %}
+    </div>
+
     {% category_list_tag %}
 
     {% block content %}

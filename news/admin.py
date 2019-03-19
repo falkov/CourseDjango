@@ -15,12 +15,7 @@ class CategoryAdmin(MPTTModelAdmin):
 
     mptt_indent_field = 'name'
     mptt_level_indent = 30
-
-    # непонятно, как вернуть из модели Category значение поля 'amount_for_pagination'
-    # или как вызвать функцию модели pagination_amount(), которая возвращает это
-    # list_per_page = int(Category.pagination_amount)
-    list_per_page = 20  # пока так будет
-
+    list_per_page = 20
 
 
 @admin.register(Tag)
@@ -39,8 +34,8 @@ class CommentInline(admin.TabularInline):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'title', 'subtitle', 'user', 'category','slug', 'text_short', 'created_date_short', 'edited_date_short', 'published_date_short',
-        'do_publish', 'show_for_all',
+        'id', 'title', 'subtitle', 'user', 'category', 'slug', 'text_short', 'created_date_short', 'edited_date_short',
+        'published_date_short', 'do_publish', 'show_for_all',
     )
     list_display_links = ('title',)
     list_filter = ('created_date', 'category', 'tags',)

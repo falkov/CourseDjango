@@ -23,5 +23,6 @@ from CourseDjango import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('news/', include('news.urls')),
+    path('accounts/', include('allauth.urls')),
     path('', include('news.urls')),  # здеь будет главная страница сайта (пока include чтобы не было ошибки)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

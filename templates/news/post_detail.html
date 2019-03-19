@@ -3,16 +3,22 @@
 {% extends 'base.html' %}
 
 {% load post_detail_tag %}
-
 {% load crispy_forms_filters %}
 
 {% block content %}
+    
     <div class="h3 text-center font-weight-bold" style="color: blue">Пост {{ post.id }}</div>
     {% post_detail_tag this_post=post this_template=post.category.detail_post_template %}
 
-    <form action="{% url 'post_detail' slug=post.slug %}" method="post">
-        {% csrf_token %}
-        {{ form | crispy }}
-        <button type="submit" class="btn btn-success btn-sm">Отправить комментарий</button>
-    </form>
+    {% if user.is_authenticated %}
+        <form action="{% url 'post_detail' slug=post.slug %}" method="post">
+            {% csrf_token %}
+            {{ form | crispy }}
+            <button type="submit" class="btn btn-success btn-sm">Отправить комментарий</button>
+        </form>
+    {% else %}
+        <p>Только зарегистрированный пользователи могут отправлять сообщения!</p>
+        <p><a href="{% url 'account_login' %}">Войти/Зарегистрироваться</a></p>
+    {% endif %}
+
 {% endblock content %}

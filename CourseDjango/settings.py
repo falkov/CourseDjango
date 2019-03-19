@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
     'mptt',
     'crispy_forms',
@@ -131,3 +136,30 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# begin - for allauth ------------
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+SITE_ID = 1   # прописать свой сайт в admin/сайты (таблица django_site) и здесь указать его id (сейчас там example.com)
+
+LOGIN_URL = '/accounts/login/'  # форма авторизации, если юзер не залогинился
+LOGIN_REDIRECT_URL='/'          # редирект после логина
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # посылает на консоль
+
+# allauth configuration
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "username"   # “email”, “username_email”
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1   # default = 3
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_USERNAME_BLACKLIST = ["admin", "administrator", "moderator", "falkov"]  # usernames that can’t be used by user
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/'   # редирект после подтверждения email
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+# end - for allauth --------------

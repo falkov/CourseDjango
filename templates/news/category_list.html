@@ -1,5 +1,0 @@
-{% for category in category_list %}
-    <a href={{ category.get_absolute_url }}>{{ category.name }}</a> <br>
-{% endfor %}
-
-<a href={% url 'posts_list' %}>Все категории</a> <br>
