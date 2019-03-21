@@ -1,33 +1,27 @@
-{# Вывод списка постов в кратком виде: заголовок (ссылка на пост в подробном виде), дата, время #}
-
 {% extends 'base.html' %}
-
-{#{% load mptt_tags %}#}
 {% load post_short_tag %}
 
 {% block content %}
-{#    {% if contextprocessor_categories_all %}#}
-{#        <ul class="root">#}
-{#            {% recursetree contextprocessor_categories_all %}#}
-{#                <li>#}
-{#                    {{ node.name }}#}
-{#                    {% if not node.is_leaf_node %}#}
-{#                        <ul class="children">#}
-{#                            {{ children }}#}
-{#                        </ul>#}
-{#                    {% endif %}#}
-{#                </li>#}
-{#            {% endrecursetree %}#}
-{#        </ul>#}
-{#    {% endif %}#}
 
-    <div class="h3 text-center font-weight-bold" style="color: blue">Посты <span class="small"> (Категория: {{ what_category }})</span> </div>
+    <div class="h2 text-center font-weight-bold" style="color: blue">Посты</div>
+
+    <div class="text-center" style="color: blue">
+        {% if days_amount %}
+            {% if days_amount < 19000 %}
+                <p>({{ date_from|date:"d.m.Y" }} - {{ date_to|date:"d.m.Y" }}. Всего дней: {{ days_amount }} )</p>
+            {% else %}
+                <p> (за все время)</p>
+            {% endif %}
+        {% else %}
+            <p> (Категория: {{ what_category }})</p>
+        {% endif %}
+    </div>
 
     {% for post in posts %}
         {% post_short_tag this_post=post this_template=post.category.short_post_template %}
     {% endfor %}
 
-{#  взял откуда то пагинацию, нужно разобраться  #}
+    {#  взял откуда то пагинацию, нужно разобраться  #}
     {% if is_paginated %}
         <ul class="pagination">
             {% if page_obj.has_previous %}
@@ -53,4 +47,3 @@
     {% endif %}
 
 {% endblock content %}
-

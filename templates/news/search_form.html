@@ -1,0 +1,10 @@
+<form action="{% url 'search_category_title' %}" method="get">
+    <a href="{% url 'search_days' days_amount=1 %}" class="badge badge-pill badge-primary">Сегодня</a> &nbsp;
+    <a href="{% url 'search_days' days_amount=7 %}" class="badge badge-pill badge-primary">Неделя</a> &nbsp;
+    <a href="{% url 'search_days' days_amount=30 %}" class="badge badge-pill badge-primary">Месяц</a> &nbsp;
+    <a href="{% url 'search_days' days_amount=20000 %}" class="badge badge-pill badge-primary">Все время</a>
+    &nbsp; &nbsp;
+
+    <input type="text" name="search" value="" placeholder="Поиск" class="small">
+    <button type="submit" class="btn btn-outline-success btn-sm">Поиск</button>
+</form>

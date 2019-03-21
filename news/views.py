@@ -1,20 +1,11 @@
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect, HttpResponse
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
-from datetime import datetime
+from django.utils import timezone
 
 from .models import Post, Category
 from .forms import CommentForm
-
-
-# class PostList(View):
-#     """Список постов"""
-#     def get(self, request, slug=None):
-#         if slug is None:
-#             return render(request, 'news/short_post_list.html', {'posts': Post.objects.all()})
-#         else:
-#             category_id = get_object_or_404(Category, slug=slug).id
-#             return render(request, 'news/short_post_list.html', {'posts': Post.objects.filter(category_id=category_id)})
 
 
 class PostList(ListView):
@@ -34,7 +25,7 @@ class PostList(ListView):
 
                 qs = qs.filter(
                     do_publish=True,
-                    published_date__date__lte=datetime.now(),
+                    published_date__date__lte=timezone.now(),
                 )
 
                 if not self.request.user.is_authenticated:
@@ -61,14 +52,6 @@ class PostDetail(DetailView):
     model = Post
     template_name = 'news/post_detail.html'
 
-    # def get_queryset(self):
-    #     post = Post.objects.get(
-    #         category__slug=self.kwargs.get('slug'),
-    #         do_publish=True,
-    #         published_date__lte=datetime.now(),
-    #     )
-    #     return post
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = CommentForm
@@ -89,3 +72,27 @@ class PostDetail(DetailView):
 
         else:
             return HttpResponse(status=400)
+
+
+class Search(View):
+    def get(self, request):
+        search = request.GET.get('search', None)
+
+        # context = Post.objects.filter(title__icontains=search) | Post.objects.filter(category__name__contains=search)
+        context = Post.objects.filter(Q(title__icontains=search) | Q(category__name__contains=search))
+
+        return render(request, 'news/short_post_list.html', {'posts': context})
+
+
+class SearchForDate(View):
+    def get(self, request, days_amount):
+        date_from = timezone.now() - timezone.timedelta(days=days_amount)
+        date_to = timezone.now()  # если нужно будет искать за два месяца назад (например); пока datetime.now()
+        context = Post.objects.filter(published_date__gte=date_from)
+
+        return render(request, 'news/short_post_list.html', {
+            'posts': context,
+            'days_amount': days_amount if days_amount < 19_000 else 'за все время',
+            'date_from': date_from,
+            'date_to': date_to,
+        })

@@ -6,7 +6,7 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-    
+
     <div class="h3 text-center font-weight-bold" style="color: blue">Пост {{ post.id }}</div>
     {% post_detail_tag this_post=post this_template=post.category.detail_post_template %}
 
