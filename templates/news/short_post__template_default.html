@@ -1,18 +1,62 @@
 {# Вывод поста в кратком виде: Заголовок, дата и время поста #}
 
-<div class="container-fluid" style="background-color: #ffdfe3; border: 1px double #ffb3a2; ">
-    <div class="row" style="border-bottom: solid 1px #ffb3a2; padding: 5px">
-        <div class="col">
-            <a href={{ this_post.get_absolute_url }}>{{ this_post.title }}</a>
+{#<div class="container-fluid" style="background-color: #ffdfe3; border: 1px double #ffb3a2; ">#}
+{#    <div class="row" style="border-bottom: solid 1px #ffb3a2; padding: 5px">#}
+{#        <div class="col">#}
+{#            <a href={{ this_post.get_absolute_url }}>{{ this_post.title }}</a>#}
+{#        </div>#}
+{##}
+{#        <div class="col text-center">#}
+{#            <span class="small">Категория: {{ this_post.category.name }}</span>#}
+{#        </div>#}
+{##}
+{#        <div class="col-2 text-right">#}
+{#            <span class="small">{{ this_post.created_date }}</span>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+{#<br>#}
+
+<div class="card-deck col-lg-3 col-md-6 mb-4">
+    <div class="card z-depth-2">
+        <!-- Card header -->
+        <div class="card-header rounded-top mdb-color lighten-3 text-center pt-3 white-text">
+            <a class="text-white" href="{{ this_post.category.get_absolute_url }}">
+                <span class="small">категория: </span>{{ this_post.category.name }}
+            </a>
         </div>
 
-        <div class="col text-center">
-            <span class="small">Категория: {{ this_post.category.name }}</span>
+        <div class="view overlay" style="height: 200px">
+            {% if this_post.image_main %}
+                <img src="{{ this_post.image_main.url }}" class="card-img-top" alt="image from post">
+            {% else %}
+                <img src="/media/image_default.jpg" class="card-img-top" alt="image default">
+            {% endif %}
+
+            <div class="mask rgba-white-slight"></div>
         </div>
 
-        <div class="col-2 text-right">
-            <span class="small">{{ this_post.created_date }}</span>
+        <div class="card-body">
+            <div class="h6 card-title w-100 multy_string_trancate"
+                 style="height: 50px">{{ this_post.title }}</div>
+            <div class="card-text w-100 small multy_string_trancate"
+                 style="height: 150px">{{ this_post.text }}</div>
+
+            <div class="card-text my-2">
+                {% for tag in this_post.tags.all %}
+                    <span class="badge badge-pill badge-primary">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+
+            <a href="{{ this_post.get_absolute_url }}">подробнее</a>
+        </div>
+
+        <!-- Card footer -->
+        <div class="card-footer rounded-bottom mdb-color lighten-3">
+            <div class="row px-3 text-white justify-content-between small">
+                <div>{{ this_post.created_date|date:"d.m.Y" }}</div>
+                <div>{{ this_post.user }}</div>
+            </div>
         </div>
     </div>
 </div>
-<br>

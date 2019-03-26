@@ -1,8 +1,8 @@
-<form action="{% url 'search_category_title' %}" method="get">
-    <a href="{% url 'search_days' days_amount=1 %}" class="badge badge-pill badge-primary">Сегодня</a> &nbsp;
-    <a href="{% url 'search_days' days_amount=7 %}" class="badge badge-pill badge-primary">Неделя</a> &nbsp;
-    <a href="{% url 'search_days' days_amount=30 %}" class="badge badge-pill badge-primary">Месяц</a> &nbsp;
-    <a href="{% url 'search_days' days_amount=20000 %}" class="badge badge-pill badge-primary">Все время</a>
+<form action="{% url 'search_category_title_list' %}" method="get">
+    <a href="{% url 'search_days_list' days_amount=1 %}" class="badge badge-pill badge-primary">&nbsp;Сегодня&nbsp;</a> &nbsp;
+    <a href="{% url 'search_days_list' days_amount=7 %}" class="badge badge-pill badge-primary">&nbsp;Неделя&nbsp;</a> &nbsp;
+    <a href="{% url 'search_days_list' days_amount=30 %}" class="badge badge-pill badge-primary">&nbsp;Месяц&nbsp;</a> &nbsp;
+    <a href="{% url 'search_days_list' days_amount=20000 %}" class="badge badge-pill badge-primary">&nbsp;Все время&nbsp;</a>
     &nbsp; &nbsp;
 
     <input type="text" name="search" value="" placeholder="Поиск" class="small">

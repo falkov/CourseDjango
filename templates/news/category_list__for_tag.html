@@ -5,16 +5,18 @@
 {% load mptt_tags %}
 
 {% if category_list %}
-    <ul class="root">
+    <ul class="px-0 root small list-unstyled">
         {% recursetree category_list %}
             <li>
                 <a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
 
                 {% if not node.is_leaf_node %}
-                    <ul class="children">{{ children }}</ul>
+                    <ul class="children list-unstyled pl-3 ml-3">{{ children }}</ul>
                 {% endif %}
             </li>
         {% endrecursetree %}
+
+        <hr class="my-2">
 
         <li><a href={% url 'posts_list' %}>Все категории</a></li>
     </ul>

@@ -1,0 +1,42 @@
+.one_string_trancate {
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.multy_string_trancate {
+    overflow: hidden;
+    height: 200px;
+    width: 300px;
+    line-height: 25px;
+}
+
+.multy_string_trancate:before {
+    content: "";
+    float: left;
+    width: 5px;
+    height: 200px;
+}
+
+.multy_string_trancate > *:first-child {
+    float: right;
+    width: 100%;
+    margin-left: -5px;
+}
+
+.multy_string_trancate:after {
+    content: "\02026";
+    box-sizing: content-box;
+    float: right;
+    position: relative;
+    top: -25px;
+    left: 100%;
+    width: 3em;
+    margin-left: -3em;
+    padding-right: 5px;
+    text-align: right;
+    background-size: 100% 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+}

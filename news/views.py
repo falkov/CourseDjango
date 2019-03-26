@@ -32,7 +32,7 @@ class PostList(ListView):
                     qs = qs.filter(show_for_all=True)
         else:
             qs = self.model.objects.all()
-            self.paginate_by = 20
+            self.paginate_by = 8
 
         return qs
 
@@ -74,25 +74,34 @@ class PostDetail(DetailView):
             return HttpResponse(status=400)
 
 
-class Search(View):
-    def get(self, request):
-        search = request.GET.get('search', None)
+class SearchForCategoryAndTitleList(ListView):
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'news/short_post_list.html'
+    paginate_by = 8
 
-        # context = Post.objects.filter(title__icontains=search) | Post.objects.filter(category__name__contains=search)
-        context = Post.objects.filter(Q(title__icontains=search) | Q(category__name__contains=search))
+    def get_queryset(self):
+        what_search = self.request.GET.get('search', '')
+        qs = Post.objects.filter(Q(title__icontains=what_search) | Q(category__name__contains=what_search))
+        return qs
 
-        return render(request, 'news/short_post_list.html', {'posts': context})
 
+class SearchForDateList(ListView):
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'news/short_post_list.html'
+    paginate_by = 8
 
-class SearchForDate(View):
-    def get(self, request, days_amount):
+    def get_queryset(self):
+        days_amount = self.kwargs.get('days_amount')
         date_from = timezone.now() - timezone.timedelta(days=days_amount)
-        date_to = timezone.now()  # если нужно будет искать за два месяца назад (например); пока datetime.now()
-        context = Post.objects.filter(published_date__gte=date_from)
+        qs = Post.objects.filter(published_date__gte=date_from)
+        return qs
 
-        return render(request, 'news/short_post_list.html', {
-            'posts': context,
-            'days_amount': days_amount if days_amount < 19_000 else 'за все время',
-            'date_from': date_from,
-            'date_to': date_to,
-        })
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(SearchForDateList, self).get_context_data(**kwargs)
+        days_amount = self.kwargs.get('days_amount')
+        context['days_amount'] = days_amount if days_amount < 19_000 else 'за все время'
+        context['date_from'] = timezone.now() - timezone.timedelta(days=days_amount)
+        context['date_to'] = timezone.now()
+        return context

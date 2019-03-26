@@ -1,39 +1,55 @@
-{# Вывод поста в полном виде: Заголовок, дата и время поста, текст поста, теги, комменты, форма добавления коммента #}
 {% load crispy_forms_filters %}
 
 {% block content %}
-    <div class="container-fluid" style="background-color: #ffdfe3; border: 1px double #ffb3a2; ">
-        <div class="row" style="border-bottom: solid 1px #ffb3a2; padding: 5px">
-            <div class="col">
-                {{ this_post.title }}
+    <div class="card-deck col-10">
+        <div class="card z-depth-2">
+            <div class="card-header rounded-top mdb-color lighten-3 pt-3 white-text text-left">
+                <a class="text-white" href="{{ this_post.category.get_absolute_url }}">
+                    <span class="small">категория: </span>{{ this_post.category.name }}
+                </a>
             </div>
-            <div class="col-2 text-right">
-                <span class="small">{{ this_post.created_date }}</span>
-            </div>
-        </div>
 
-        <div class="row" style="border-bottom: solid 1px #ffb3a2; padding: 5px">
-            <div class="col small">
-                {{ this_post.text }}
+            <div class="row justify-content-center py-1">
+                <div>
+                    {% if this_post.image_main %}
+                        <img src="{{ this_post.image_main.url }}" class="card-img-top" alt="image from post"
+                             style="height: 200px; width: auto">
+                    {% else %}
+                        <img src="/media/image_default.jpg" class="card-img-top" alt="image default"
+                             style="height: 200px; width: auto">
+                    {% endif %}
+                </div>
             </div>
-        </div>
 
-        <div class="row" style="border-bottom: solid 1px #ffb3a2; padding: 5px">
-            <div class="col">
-                {% for tag in this_post.tags.all %}
-                    <span class="badge badge-pill badge-primary">{{ tag.name }}</span>
-                {% endfor %}
-            </div>
-        </div>
+            <div class="card-body text-left">
+                <div class="h6 text-left card-title w-100 black-text">
+                    <span class="small">{{ this_post.user }} ({{ this_post.created_date|date:"d.m.Y H:m" }}):</span>
+                    {{ this_post.title }}
+                </div>
 
-        <div class="row" style="padding: 5px">
-            <div class="col">
-                {% for comment in this_post.get_comments %}
-                    <span class="small text-primary">{{ comment.created }}</span>
-                    <p class="small">{{ comment.text }}</p>
-                {% endfor %}
+                <div class="card-text w-100 small black-text">{{ this_post.text }}</div>
+
+                <hr>
+
+                <div class="card-text">
+                    {% for tag in this_post.tags.all %}
+                        <span class="badge badge-pill badge-primary">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+
+                <hr>
+
+                <div class="card-text black-text">
+                    {% for comment in this_post.get_comments %}
+                        <div class="my-2 p-1 small bg-light">
+                            <p class="m-2 text-primary">{{ comment.created }}</p>
+                            <p class="m-2">{{ comment.text }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
-    <br>
+
 {% endblock content %}
+

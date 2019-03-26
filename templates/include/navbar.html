@@ -1,0 +1,31 @@
+{% load staticfiles %}
+{% load category_list_tag %}
+{% load account %}
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+    <div class="container">
+        <!-- Collapse -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    {% include 'news/search_form.html' %}
+                </li>
+            </ul>
+
+            <ul class="navbar-nav nav-flex-icons">
+                <li class="nav-item">
+                    {% if user.is_authenticated %}
+                        {{ request.user.username }} / <a href="{% url 'account_logout' %}">Выйти</a>
+                    {% else %}
+                        <a href="{% url 'account_login' %}">Вход на сайт</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
