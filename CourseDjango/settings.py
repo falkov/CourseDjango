@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'crispy_forms',
 
     'news',
+    'contact',
 ]
 
 MIDDLEWARE = [
@@ -167,3 +168,6 @@ ACCOUNT_USERNAME_MIN_LENGTH = 4
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/'   # редирект после подтверждения email
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 # end - for allauth --------------
+
+MY_INFO = 80
+MESSAGE_LEVEL = MY_INFO
