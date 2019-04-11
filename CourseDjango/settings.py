@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
     'news',
     'contact',
+    'app_profile',
 ]
 
 MIDDLEWARE = [
